@@ -132,11 +132,7 @@ Formula::Formula(const string & formula)
 
 Formula::~Formula()
 {
-	//????
-	/*
-	delete the whole tree
-	*/
-
+	Tree::deleteTree(this->tree);
 }
 
 string Formula::getString()

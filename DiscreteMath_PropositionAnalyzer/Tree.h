@@ -20,9 +20,10 @@ public:
 
 	~Tree();
 
-	TreeNodeType getType();
-	VarName getValue();
-	Tree * getRight();
-	Tree * getLeft();
+	TreeNodeType getType() const;
+	VarName getValue() const;
+	Tree * getRight()const;
+	Tree * getLeft()const;
+	static void deleteTree(Tree*);
 };
 
