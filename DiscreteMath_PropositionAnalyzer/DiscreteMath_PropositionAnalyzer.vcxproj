@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FileHelper.cpp" />
     <ClCompile Include="Formula.cpp" />
     <ClCompile Include="InterfaceNotes.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -146,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CLI.h" />
+    <ClInclude Include="FileHelper.h" />
     <ClInclude Include="Formula.h" />
     <ClInclude Include="Tree.h" />
   </ItemGroup>

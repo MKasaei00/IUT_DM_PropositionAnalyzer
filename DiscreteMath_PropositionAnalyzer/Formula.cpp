@@ -213,9 +213,20 @@ map<VarName, VarType> Formula::binaryToMap(unsigned long long int binary)
 	map<VarName, VarType> map;
 	unsigned short cursor = vars.size()-1;
 	for (auto it = vars.begin(); it != vars.end(); ++it , cursor--)
-	{
-		map[*it] = (bool)(binary & (1 << cursor));
-	}
+		map[*it] = (bool)(binary & (1 << (long long)cursor));
 
 	return map;
+}
+
+bool Formula::iterateVarAssigns(const IteratorVarAssignsFunction & f)
+{
+	unsigned long long int count = (unsigned long long int)pow(2, vars.size());
+	bool stop = false;
+	bool res = true;
+	for (unsigned long long int i = 0; (i < count) && !stop; i++)
+	{
+		auto map = binaryToMap(i);
+		res = f(*this , map, assign(map) , stop);
+	}
+	return res;
 }

@@ -8,8 +8,12 @@ using std::string;
 using std::set;
 using std::map;
 
+
 class Formula
 {
+
+	typedef	bool(*IteratorVarAssignsFunction)(const Formula& form,const map<VarName, VarType> &, const VarType &res , bool &stop);
+
 private:
 	static const char OPEN_PAR = '(';
 	static const char CLOSE_PAR = ')';
@@ -30,7 +34,7 @@ private:
 
 	void getVariables(set<VarName> &vars, Tree * tree);
 	bool assign(const map<VarName, VarType>& vars, Tree * tree);
-
+	map<VarName, VarType> binaryToMap(unsigned long long int binary);
 public:
 	Formula(const string &formula);
 	~Formula();
@@ -39,7 +43,5 @@ public:
 
 	bool Formula::assign(map<VarName, VarType> vars);
 	set<VarName> getVariables();
-
-	map<VarName, VarType> binaryToMap(unsigned long long int binary);
-
+	bool iterateVarAssigns(const IteratorVarAssignsFunction &iteratorFunction);
 };
