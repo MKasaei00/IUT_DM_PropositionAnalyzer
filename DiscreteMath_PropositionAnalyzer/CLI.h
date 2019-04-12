@@ -150,9 +150,10 @@ void CLI::start()
 				}
 				else
 				{	//def error
-					out << "Invalid statement\n";
 					if (message.length())
 						out << "message : " << message << '\n';
+					else 
+						out << "Invalid statement\n";
 					out << '\n';
 				}
 				help();
