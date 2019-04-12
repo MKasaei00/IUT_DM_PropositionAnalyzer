@@ -58,6 +58,8 @@ public:
 	void printHelpStatement(const char * statement, const char *desc);
 	void printEmptyLine();
 	void clearScreen();
+	void printLine(const char &ch, const unsigned short int &count);
+
 };
 
 
@@ -165,10 +167,7 @@ void CLI::start()
 
 void CLI::stop()
 {
-	if (active)
-	{
-		active = false;
-	}
+	if (active)		active = false;
 }
 
 void CLI::help()
@@ -196,4 +195,10 @@ void CLI::printEmptyLine()
 void CLI::clearScreen()
 {
 	system("cls");
+}
+
+void CLI::printLine(const char &ch, const unsigned short int &count)
+{
+	for (unsigned short int i = 0; i < count; i++)			out << ch;
+	out << '\n';
 }
