@@ -145,6 +145,7 @@
     <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CLI.h" />
     <ClInclude Include="Formula.h" />
     <ClInclude Include="Tree.h" />
     <ClInclude Include="UI.h" />
