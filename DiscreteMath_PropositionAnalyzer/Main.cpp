@@ -91,12 +91,13 @@ bool cliHandler(const ArgCount &count, const string*words, string &message, ostr
 				{
 					Formula f(formStr[0]);
 					//print table header
+					out <<"input : "<< setw(COL_W) << std::left << formStr[0] << '\n';
 					auto vars = f.getVariables();
 					for (auto it = vars.begin(); it != vars.end(); it++)
 					{
 						out << setw(COL_W) << std::left << *it;
 					}
-					out << setw(COL_W) << std::left << formStr[0] << '\n';
+					out << setw(COL_W) << std::left << "proposition" << '\n';
 					for (size_t i = 0; i < COL_W * (vars.size() + 1); i++)
 						out << '-';
 					out << '\n';
