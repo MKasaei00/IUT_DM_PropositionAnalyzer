@@ -17,7 +17,7 @@ typedef unsigned char ArgCount;
 
 class CLI
 {
-	typedef bool(*HandlerFunction)(const ArgCount &, const string*, string & , ostream&);
+	typedef bool(*HandlerFunction)(const ArgCount &, const string*, string &, ostream&);
 	typedef	void(*HelpFunction)(void);
 	typedef void(*ErrorFunction)(const string & message);
 
@@ -49,13 +49,13 @@ public:
 	);
 	~CLI();
 
-	void start();
+	void start(const bool &showHelp = false);
 	void stop();
 	void help();
 
 	void maximizeWindow();
 
-	void printHelpStatement(const char * statement, const char *desc);
+	void printHelpStatement(const char * statement, const char *desc = "");
 	void printEmptyLine();
 	void clearScreen();
 	void printLine(const char &ch, const unsigned short int &count);
@@ -68,8 +68,8 @@ public:
 
 
 //init and start the CLI
-CLI::CLI(const string &name , istream &inputStream, ostream&out, HandlerFunction handler, HelpFunction helper, ErrorFunction errorHandler, const size_t& INPUT_MAX_WORDS)
-	: name(name) , in(inputStream), out(out), MAX_WORDS(INPUT_MAX_WORDS)
+CLI::CLI(const string &name, istream &inputStream, ostream&out, HandlerFunction handler, HelpFunction helper, ErrorFunction errorHandler, const size_t& INPUT_MAX_WORDS)
+	: name(name), in(inputStream), out(out), MAX_WORDS(INPUT_MAX_WORDS)
 {
 	//assert(handler!= null)
 	//assert(helper!= null)
@@ -84,11 +84,12 @@ CLI::~CLI()
 }
 
 
-void CLI::start()
+void CLI::start(const bool &showHelp)
 {
 	if (!active)
 	{
 		active = true;
+		help();
 		while (active)
 		{
 			string line;
@@ -141,7 +142,7 @@ void CLI::start()
 				}
 			}
 			string message;
-			if (!handler(count, words, message , out))
+			if (!handler(count, words, message, out))
 			{
 				//error
 				if (errorHandler)
@@ -152,7 +153,7 @@ void CLI::start()
 				{	//def error
 					if (message.length())
 						out << "message : " << message << '\n';
-					else 
+					else
 						out << "Invalid statement\n";
 					out << '\n';
 				}

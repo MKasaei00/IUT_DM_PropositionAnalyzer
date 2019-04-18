@@ -196,9 +196,9 @@ void cliHelper(void)
 	cli.printHelpStatement("infer", "[input file name (has n line : n-1 lines premises the last is conclusion)]");
 	*/
 	cli.printEmptyLine();
-	cli.printHelpStatement("cls", "");
-	cli.printHelpStatement("help", "");
-	cli.printHelpStatement("exit", "");
+	cli.printHelpStatement("cls");
+	cli.printHelpStatement("help");
+	cli.printHelpStatement("exit");
 	cli.printEmptyLine();
 }
 
@@ -206,8 +206,7 @@ void cliHelper(void)
 int main()
 {
 	cli.maximizeWindow();
-	cli.help();
-	cli.start();
+	cli.start(true);
 
 	return 0;
 }
