@@ -8,7 +8,7 @@ const char* Formula::BICON = "<->";
 
 Tree * Formula::parse(string str)
 {
-	const unsigned int len = str.length();
+	const size_t len = str.length();
 	if (str[0] == OPEN_PAR)
 	{
 		// expression is compound
@@ -23,8 +23,8 @@ Tree * Formula::parse(string str)
 			Tree * rightOperand = nullptr;
 			Tree * leftOperand = nullptr;
 
-			unsigned short int leftOperandLen;
-			unsigned short int rightOperandLen;
+			size_t leftOperandLen;
+			size_t rightOperandLen;
 
 
 			if (str[1] == OPEN_PAR)
@@ -63,7 +63,7 @@ Tree * Formula::parse(string str)
 				unsigned int openCount = 0;
 				unsigned int closeCount = 0;
 
-				for (unsigned int i = len-2; i >=1 ; --i)
+				for (size_t i = len-2; i >=1 ; --i)
 				{
 					if (str[i] == OPEN_PAR)
 					{
@@ -71,7 +71,7 @@ Tree * Formula::parse(string str)
 						if (closeCount == openCount)
 						{
 							rightOperand = parse(str.substr(i, len - i - 1));
-							rightOperandLen = len - i - 1;
+							rightOperandLen = (len - i - 1);
 							break;
 						}
 					}
@@ -157,7 +157,7 @@ void Formula::getVariables(set<VarName> &vars , Tree * tree)
 	}
 }
 
-bool Formula::assign(const map<VarName, VarType>& vars, Tree * tree)
+bool Formula::assign(const map<VarName, VarType>& vars, Tree * tree) const
 {
 	switch (tree->getType())
 	{
@@ -188,37 +188,41 @@ bool Formula::assign(const map<VarName, VarType>& vars, Tree * tree)
 	case TreeNodeType::VARIABLE:
 		return vars.at(tree->getValue());
 		break;
-	default:
-		return false;
-		break;
 	}
+	return false;
 }
 
-bool Formula::assign(map<VarName, VarType> vars)
+bool Formula::assign(map<VarName, VarType> vars) const
 {
 	vars[TRUE] = true;
 	vars[FALSE] = false;
 	return assign(vars, this->tree);
 }
 
+bool Formula::assign(const long long int &binary) const
+{
+	auto vars = binaryToMap(binary);
+	return assign(vars);
+}
+
 //returns just parameters not T and F
-set<VarName> Formula::getVariables()
+set<VarName> Formula::getVariables() const
 {
 	return vars;
 }
 
 
-map<VarName, VarType> Formula::binaryToMap(unsigned long long int binary)
+map<VarName, VarType> Formula::binaryToMap(unsigned long long int binary) const
 {
 	map<VarName, VarType> map;
-	unsigned short cursor = vars.size()-1;
-	for (auto it = vars.begin(); it != vars.end(); ++it , cursor--)
-		map[*it] = (bool)(binary & (1 << (long long)cursor));
+	size_t cursor = vars.size()-1;
+	for (auto it = vars.begin(); it != vars.end(); ++it, cursor--)
+		map[*it] = (bool)(binary & (1i64 << cursor));
 
 	return map;
 }
 
-bool Formula::iterateVarAssigns(const IteratorVarAssignsFunction & f)
+bool Formula::iterateVarAssigns(const IteratorVarAssignsFunction & f) const
 {
 	unsigned long long int count = (unsigned long long int)pow(2, vars.size());
 	bool stop = false;

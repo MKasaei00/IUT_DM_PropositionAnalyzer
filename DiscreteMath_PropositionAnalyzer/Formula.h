@@ -33,15 +33,16 @@ private:
 	static Tree* parse(string);
 
 	void getVariables(set<VarName> &vars, Tree * tree);
-	bool assign(const map<VarName, VarType>& vars, Tree * tree);
-	map<VarName, VarType> binaryToMap(unsigned long long int binary);
+	bool assign(const map<VarName, VarType>& vars, Tree * tree) const;
 public:
 	Formula(const string &formula);
 	~Formula();
 
 	string getString();
 
-	bool Formula::assign(map<VarName, VarType> vars);
-	set<VarName> getVariables();
-	bool iterateVarAssigns(const IteratorVarAssignsFunction &iteratorFunction);
+	bool Formula::assign(map<VarName, VarType> vars) const;
+	bool Formula::assign(const long long int&) const;
+	set<VarName> getVariables() const;
+	bool iterateVarAssigns(const IteratorVarAssignsFunction &iteratorFunction) const;
+	map<VarName, VarType> binaryToMap(unsigned long long int binary) const;
 };
