@@ -187,6 +187,9 @@ bool cliHandler(const ArgCount &count, const string*words, string &message, ostr
 								for (auto it = map.begin(); it != map.end(); it++)
 									cout << '\t' << (*it).first << " = " << (*it).second << "\n";
 								cout << "\n";
+								cout << "prop 1 =>> " << (f1.assign(i) ? "True" : "False") << '\n';
+								cout << "prop 2 =>> " << (f2.assign(i) ? "True" : "False") << '\n';
+								cout << "\n";
 								return true;
 							}
 						}
