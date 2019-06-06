@@ -14,12 +14,10 @@ using std::setfill;
 using std::setw;
 using std::to_string;
 
-bool cliHandler(const ArgCount &, const string*, string &, ostream&);
-void cliHelper(void);
+bool cliHandler(CLI& cli, const ArgCount &, const string*, string &);
+void cliHelper(CLI& cli);
 
 const char COL_W = 10;
-
-CLI cli("cmd", cin, cout, cliHandler, cliHelper, nullptr, 3);
 
 //void tableIterator(const map<VarName, VarType> &, const VarType &res, bool & stop)
 
@@ -76,8 +74,9 @@ bool satisIterator(const Formula& form, const map<VarName, VarType> &map, const 
 	}else return false;
 }
 
-bool cliHandler(const ArgCount &count, const string*words, string &message, ostream&out)
+bool cliHandler(CLI& cli, const ArgCount &count, const string*words, string &message)
 {
+	ostream & out = cli.outStream();
 	if (count >= 1)
 	{
 		if (count >= 2)
@@ -116,11 +115,11 @@ bool cliHandler(const ArgCount &count, const string*words, string &message, ostr
 				{
 					Formula f(formStr[0]);
 					
-					cout << "Input : " << formStr[0] << '\n';
+					out << "Input : " << formStr[0] << '\n';
 					if (f.iterateVarAssigns(totalIterator))
-						cout << "Proposition is Tautology" << '\n';
+						out << "Proposition is Tautology" << '\n';
 					else
-						cout << "Proposition is NOT Tautology" << '\n';
+						out << "Proposition is NOT Tautology" << '\n';
 				}
 				else		message = "File reading error";
 				delete[] formStr;
@@ -134,11 +133,11 @@ bool cliHandler(const ArgCount &count, const string*words, string &message, ostr
 				{
 					Formula f(formStr[0]);
 
-					cout << "Input : " << formStr[0] << '\n';
+					out << "Input : " << formStr[0] << '\n';
 					if (f.iterateVarAssigns(contrIterator))
-						cout << "Proposition is Contradiction" << '\n';
+						out << "Proposition is Contradiction" << '\n';
 					else
-						cout << "Proposition is NOT Contradiction" << '\n';
+						out << "Proposition is NOT Contradiction" << '\n';
 				}
 				else		message = "File reading error";
 				delete[] formStr;
@@ -152,11 +151,11 @@ bool cliHandler(const ArgCount &count, const string*words, string &message, ostr
 				{
 					Formula f(formStr[0]);
 
-					cout << "Input : " << formStr[0] << '\n';
+					out << "Input : " << formStr[0] << '\n';
 					if (f.iterateVarAssigns(satisIterator))
-						cout << "Proposition is Satisfiable" << '\n';
+						out << "Proposition is Satisfiable" << '\n';
 					else
-						cout << "Proposition is NOT Satisfiable" << '\n';
+						out << "Proposition is NOT Satisfiable" << '\n';
 				}
 				else		message = "File reading error";
 				delete[] formStr;
@@ -168,8 +167,8 @@ bool cliHandler(const ArgCount &count, const string*words, string &message, ostr
 				string* formulaStrings = readFile(size, words[1], 2);
 				if (size == 2)
 				{
-					cout << "prop 1 : " << formulaStrings[0] << '\n';
-					cout << "prop 2 : " << formulaStrings[1] << '\n';
+					out << "prop 1 : " << formulaStrings[0] << '\n';
+					out << "prop 2 : " << formulaStrings[1] << '\n';
 
 					Formula f1(formulaStrings[0]);
 					Formula f2(formulaStrings[1]);
@@ -181,20 +180,20 @@ bool cliHandler(const ArgCount &count, const string*words, string &message, ostr
 							if (f1.assign(i) != f2.assign(i))
 							{
 								// counter example
-								cout << "Two propositions are not equivalent\n";
-								cout << "Counter example\n";
+								out << "Two propositions are not equivalent\n";
+								out << "Counter example\n";
 								auto map = f1.binaryToMap(i);
 								for (auto it = map.begin(); it != map.end(); it++)
-									cout << '\t' << (*it).first << " = " << (*it).second << "\n";
-								cout << "\n";
-								cout << "prop 1 =>> " << (f1.assign(i) ? "True" : "False") << '\n';
-								cout << "prop 2 =>> " << (f2.assign(i) ? "True" : "False") << '\n';
-								cout << "\n";
+									out << '\t' << (*it).first << " = " << (*it).second << "\n";
+								out << "\n";
+								out << "prop 1 =>> " << (f1.assign(i) ? "True" : "False") << '\n';
+								out << "prop 2 =>> " << (f2.assign(i) ? "True" : "False") << '\n';
+								out << "\n";
 								return true;
 							}
 						}
 						//no difference => they are equivalent
-						cout << "Two propositions are equivalent\n";
+						out << "Two propositions are equivalent\n";
 					}
 					else message = "Variable name or count is not the same";
 				}
@@ -223,7 +222,7 @@ bool cliHandler(const ArgCount &count, const string*words, string &message, ostr
 	return true;
 }
 
-void cliHelper(void)
+void cliHelper(CLI & cli)
 {
 	cli.printHelpStatement("table", "[input file name]");
 	cli.printHelpStatement("total", "[input file name]");
@@ -243,6 +242,7 @@ void cliHelper(void)
 
 int main()
 {
+	CLI cli("cmd", cin, cout, cliHandler, cliHelper, nullptr, 3);
 	cli.maximizeWindow();
 	cli.start(true);
 

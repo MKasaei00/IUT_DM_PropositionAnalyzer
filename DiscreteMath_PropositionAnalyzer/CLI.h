@@ -1,3 +1,6 @@
+//IUT_AP_cheats repo
+//version 1.3
+
 #pragma once
 #include <windows.h>
 
@@ -17,9 +20,9 @@ typedef unsigned char ArgCount;
 
 class CLI
 {
-	typedef bool(*HandlerFunction)(const ArgCount &, const string*, string &, ostream&);
-	typedef	void(*HelpFunction)(void);
-	typedef void(*ErrorFunction)(const string & message);
+	typedef bool(*HandlerFunction)(CLI& cli, const ArgCount &, const string*, string &);
+	typedef	void(*HelpFunction)(CLI& cli);
+	typedef void(*ErrorFunction)(CLI&cli, string & message);
 
 
 	static const size_t DEF_MAX_WORDS = 10;
@@ -60,6 +63,10 @@ public:
 	void clearScreen();
 	void printLine(const char &ch, const unsigned short int &count);
 
+	ostream& outStream() const;
+
+	void disableExit();
+	void enableExit();
 };
 
 
@@ -89,7 +96,8 @@ void CLI::start(const bool &showHelp)
 	if (!active)
 	{
 		active = true;
-		help();
+		if (showHelp)
+			help();
 		while (active)
 		{
 			string line;
@@ -142,12 +150,12 @@ void CLI::start(const bool &showHelp)
 				}
 			}
 			string message;
-			if (!handler(count, words, message, out))
+			if (!handler(*this, count, words, message))
 			{
 				//error
 				if (errorHandler)
 				{
-					errorHandler(message);
+					errorHandler(*this, message);
 				}
 				else
 				{	//def error
@@ -175,7 +183,7 @@ void CLI::stop()
 void CLI::help()
 {
 	out << "\tCommands : \n";
-	helper();
+	helper(*this);
 }
 
 void CLI::maximizeWindow()
@@ -203,4 +211,23 @@ void CLI::printLine(const char &ch, const unsigned short int &count)
 {
 	for (unsigned short int i = 0; i < count; i++)			out << ch;
 	out << '\n';
+}
+
+inline ostream & CLI::outStream() const
+{
+	return out;
+}
+
+inline void CLI::disableExit()
+{
+	HWND hwnd = GetConsoleWindow();
+	HMENU hmenu = GetSystemMenu(hwnd, FALSE);
+	EnableMenuItem(hmenu, SC_CLOSE, MF_GRAYED);
+}
+
+inline void CLI::enableExit()
+{
+	HWND hwnd = GetConsoleWindow();
+	HMENU hmenu = GetSystemMenu(hwnd, FALSE);
+	EnableMenuItem(hmenu, SC_CLOSE, MF_ENABLED);
 }
