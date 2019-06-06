@@ -118,9 +118,9 @@ bool cliHandler(const ArgCount &count, const string*words, string &message, ostr
 					
 					cout << "Input : " << formStr[0] << '\n';
 					if (f.iterateVarAssigns(totalIterator))
-						cout << "Proposition is Taotology" << '\n';
+						cout << "Proposition is Tautology" << '\n';
 					else
-						cout << "Proposition is NOT Taotology" << '\n';
+						cout << "Proposition is NOT Tautology" << '\n';
 				}
 				else		message = "File reading error";
 				delete[] formStr;
